@@ -143,6 +143,16 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-6">
+    <h1 className="text-2xl font-bold text-gray-800">
+      Implement a simple data structure to act as a 
+Security Association Database. It should allow for adding, deleting, and looking up 
+SAs based on a destination address and Security Parameter Index (SPI). 
+    </h1>
+    <h1 className="text-3xl font-bold text-blue-800">
+      4CB22CS157 & 4CB22CS158
+    </h1>
+  </div>
         {/* Blockchain Status */}
         {supabaseConnected && <BlockchainStatus saService={saService} />}
 
