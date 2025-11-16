@@ -202,23 +202,29 @@ if (!formData.key.trim()) {
           </select>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Algorithm *
-          </label>
-          <input
-            type="text"
-            value={formData.algorithm}
-            onChange={(e) => handleInputChange('algorithm', e.target.value)}
-            placeholder="AES-256-GCM"
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-              errors.algorithm ? 'border-red-300 bg-red-50' : 'border-gray-300'
-            }`}
-          />
-          {errors.algorithm && (
-            <p className="text-red-500 text-xs mt-1">{errors.algorithm}</p>
-          )}
-        </div>
+       <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Algorithm *
+  </label>
+
+  <select
+    value={formData.algorithm}
+    onChange={(e) => handleInputChange('algorithm', e.target.value)}
+    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+      errors.algorithm ? 'border-red-300 bg-red-50' : 'border-gray-300'
+    }`}
+  >
+    <option value="">-- Select Algorithm --</option>
+    <option value="AES-128">AES-128</option>
+    <option value="AES-256">AES-256</option>
+    <option value="SHA-256">SHA-256</option>
+    <option value="SHA-512">SHA-512</option>
+  </select>
+
+  {errors.algorithm && (
+    <p className="text-red-500 text-xs mt-1">{errors.algorithm}</p>
+  )}
+</div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
