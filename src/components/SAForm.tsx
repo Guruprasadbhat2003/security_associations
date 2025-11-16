@@ -23,12 +23,14 @@ export const SAForm: React.FC<SAFormProps> = ({ onAddSA }) => {
     const newErrors: Record<string, string> = {};
 
     // Validate destination address (basic IP format)
-    const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
-    if (!formData.destinationAddress) {
-      newErrors.destinationAddress = 'Destination address is required';
-    } else if (!ipRegex.test(formData.destinationAddress)) {
-      newErrors.destinationAddress = 'Invalid IP address format';
-    }
+    const addressRegex = /^(https?:\/\/)?(localhost|\d{1,3}(\.\d{1,3}){3})(:\d+)?$/;
+
+if (!formData.destinationAddress) {
+  newErrors.destinationAddress = "Destination address is required";
+} else if (!addressRegex.test(formData.destinationAddress)) {
+  newErrors.destinationAddress = "Invalid destination address format";
+}
+
 
     // Validate SPI
     const spiNum = parseInt(formData.spi);
@@ -44,11 +46,41 @@ export const SAForm: React.FC<SAFormProps> = ({ onAddSA }) => {
     }
 
     // Validate key
-    if (!formData.key.trim()) {
-      newErrors.key = 'Security key is required';
-    } else if (formData.key.length < 8) {
-      newErrors.key = 'Key must be at least 8 characters';
+    // Strong base pattern
+const strongKeyRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+
+if (!formData.key.trim()) {
+  newErrors.key = 'Security key is required';
+
+} else if (!strongKeyRegex.test(formData.key)) {
+  newErrors.key =
+    'Key must be at least 8 characters and include uppercase, lowercase, number, and special character';
+
+} else if (/(.)\1\1/.test(formData.key)) {
+  newErrors.key = 'Key cannot contain triple repeated characters (e.g., aaa, 111)';
+
+} else {
+  const key = formData.key;
+  const lower = "abcdefghijklmnopqrstuvwxyz";
+  const upper = lower.toUpperCase();
+  const nums = "0123456789";
+
+  let hasSequence = false;
+
+  for (let i = 0; i < key.length - 2; i++) {
+    const part = key.slice(i, i + 3);
+
+    if (lower.includes(part) || upper.includes(part) || nums.includes(part)) {
+      hasSequence = true;
+      break;
     }
+  }
+
+  if (hasSequence) {
+    newErrors.key = 'Key cannot contain sequential patterns like abc, ABC, 123';
+  }
+}
+
 
     // Validate lifetime
     const lifetimeNum = parseInt(formData.lifetime);
